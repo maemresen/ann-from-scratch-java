@@ -20,7 +20,7 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 
 //		part1Tests();
-//		part2Tests();
+		part2Tests();
 
 //		DataSet annTrainDataSet = DataLoader.loadDataSet("ann-train.data");
 //		DataSet annTestDataSet = DataLoader.loadDataSet("ann-test.data");

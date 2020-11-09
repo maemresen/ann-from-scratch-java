@@ -28,3 +28,6 @@
 nbactions.xml
 
 logs/*
+
+
+src/main/resources/datasets/mnist*.csv
