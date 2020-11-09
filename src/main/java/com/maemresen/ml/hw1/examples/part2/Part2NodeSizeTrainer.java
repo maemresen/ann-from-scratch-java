@@ -1,4 +1,4 @@
-package com.maemresen.ml.hw1.part2;
+package com.maemresen.ml.hw1.examples.part2;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -18,9 +18,9 @@ import com.maemresen.ml.hw1.util.loader.data.CSVLoader;
  * @date Jan 01, 2018
  * @contact maemresen07@gmail.com
  */
-public class Part2NodeSizeTest {
+public class Part2NodeSizeTrainer {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Part2NodeSizeTest.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Part2NodeSizeTrainer.class);
 
 	private static String trainAnn(int hl1NodeNumber, int hl2NodeNumber) throws IOException {
 

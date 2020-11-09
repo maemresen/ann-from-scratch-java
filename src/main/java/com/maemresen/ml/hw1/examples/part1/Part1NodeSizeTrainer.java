@@ -1,4 +1,10 @@
-package com.maemresen.ml.hw1.part1;
+package com.maemresen.ml.hw1.examples.part1;
+
+import com.maemresen.ml.hw1.util.ann.ANN;
+import com.maemresen.ml.hw1.util.ann.DataSet;
+import com.maemresen.ml.hw1.util.loader.ModelLoader;
+import com.maemresen.ml.hw1.util.loader.data.DataBalancers;
+import com.maemresen.ml.hw1.util.loader.data.DataLoader;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -7,23 +13,17 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.maemresen.ml.hw1.util.ann.ANN;
-import com.maemresen.ml.hw1.util.ann.DataSet;
-import com.maemresen.ml.hw1.util.loader.ModelLoader;
-import com.maemresen.ml.hw1.util.loader.data.DataBalancers;
-import com.maemresen.ml.hw1.util.loader.data.DataLoader;
-
 /**
  *
  * @author Emre Sen
  * @date Jan 01, 2018
  * @contact maemresen07@gmail.com
  */
-public class Part1WeightUpdateTest {
+public class Part1NodeSizeTrainer {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Part1WeightUpdateTest.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Part1NodeSizeTrainer.class);
 
-	private static String trainAnn(Integer eSize) throws IOException {
+	private static String trainAnn(int hlNodeNumber) throws IOException {
 
 		LOGGER.info("Start Loading Train Dataset");
 		DataSet trainDataSet = DataLoader.loadDataSet("ann-train.data",
@@ -44,13 +44,13 @@ public class Part1WeightUpdateTest {
 		DataSet dataset = trainDataSet;
 		double alpha = 1.5;
 		Double lambda = null;
-		int numOfIterations = 10;
+		int numOfIterations = 30000;
 		boolean untilConverge = false;
 		boolean normalization = true;
-		int epochSize = (eSize == null) ? trainDataSet.getSampleSize() : eSize;
+		int epochSize = trainDataSet.getSampleSize();
 		int numOfInputs = trainDataSet.getFeatureSize() + 1;
 		int numOfClasses = trainDataSet.getNumOfClasses();
-		List<Integer> hiddenLayersNumOfUnitList = Collections.singletonList(11);
+		List<Integer> hiddenLayersNumOfUnitList = Collections.singletonList(hlNodeNumber);
 
 		ANN ann = new ANN(dataset,
 				/* Learning Parameters */
@@ -62,29 +62,29 @@ public class Part1WeightUpdateTest {
 		LOGGER.info("Start Learning");
 		ann.learn();
 		LOGGER.trace("Finish Learning");
-		String approach = "";
-		if (eSize == null) {
-			approach = "batch";
-		} else if (eSize == 1) {
-			approach = "stochastic";
-		} else {
-			approach = "mini-batch" + eSize;
-		}
-		String filename = "network_models/part1/04_weightupdates/network-" + approach + ".dat";
+		String filename = "network_models/part1/01_nodesize/network-n" + hlNodeNumber + ".dat";
 		ModelLoader.save(ann, filename);
 		return filename;
 	}
 
-	public static String trainAnnWithStochatic() throws IOException {
-		return trainAnn(1);
+	public static String trainAnn3Node() throws IOException {
+		return trainAnn(3);
 	}
 
-	public static String trainAnnWithMiniBatch() throws IOException {
-		return trainAnn(1000);
+	public static String trainAnn11Node() throws IOException {
+		return trainAnn(11);
 	}
 
-	public static String trainAnnWithBatch() throws IOException {
-		return trainAnn(null);
+	public static String trainAnn22Node() throws IOException {
+		return trainAnn(22);
+	}
+
+	public static String trainAnn44Node() throws IOException {
+		return trainAnn(44);
+	}
+
+	public static String trainAnn88Node() throws IOException {
+		return trainAnn(88);
 	}
 
 }

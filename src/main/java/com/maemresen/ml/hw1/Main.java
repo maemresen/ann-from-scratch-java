@@ -4,12 +4,12 @@ import java.io.IOException;
 
 import org.apache.commons.math3.linear.RealMatrix;
 
-import com.maemresen.ml.hw1.part1.Part1BalancedDatasetTest;
-import com.maemresen.ml.hw1.part1.Part1NodeSizeTest;
-import com.maemresen.ml.hw1.part1.Part1NormalizationTest;
-import com.maemresen.ml.hw1.part1.Part1RegularizationTest;
-import com.maemresen.ml.hw1.part1.Part1WeightUpdateTest;
-import com.maemresen.ml.hw1.part2.Part2NodeSizeTest;
+import com.maemresen.ml.hw1.examples.part1.Part1BalancedDatasetTrainer;
+import com.maemresen.ml.hw1.examples.part1.Part1NodeSizeTrainer;
+import com.maemresen.ml.hw1.examples.part1.Part1NormalizationTrainer;
+import com.maemresen.ml.hw1.examples.part1.Part1RegularizationTrainer;
+import com.maemresen.ml.hw1.examples.part1.Part1WeightUpdateTrainer;
+import com.maemresen.ml.hw1.examples.part2.Part2NodeSizeTrainer;
 import com.maemresen.ml.hw1.util.ann.DataSet;
 import com.maemresen.ml.hw1.util.loader.ModelLoader;
 import com.maemresen.ml.hw1.util.loader.data.CSVLoader;
@@ -17,66 +17,60 @@ import com.maemresen.ml.hw1.util.loader.data.DataLoader;
 
 public class Main {
 
-	public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException {
+//        part1TrainExamples();
+//        part2TrainExamples();
+    }
 
-//		part1Tests();
-		part2Tests();
+    private static void part1TrainExamples() throws IOException {
 
-//		DataSet annTrainDataSet = DataLoader.loadDataSet("ann-train.data");
-//		DataSet annTestDataSet = DataLoader.loadDataSet("ann-test.data");
+        DataSet trainDataSet = DataLoader.loadDataSet("ann-train.data");
+        DataSet testDataSet = DataLoader.loadDataSet("ann-test.data");
 
-		DataSet mnistTestDataSet = CSVLoader.loadDataSet("mnist_test.csv");
-		RealMatrix s = CSVLoader.loadDataSet("mnist_train.csv").getDataMatrix();
-		DataSet mnistTrainDataSet = new DataSet(s.getSubMatrix(0, 30000, 0, s.getColumnDimension() - 1).getData());
+        /* For different values of the hidden unit number */
+        String trainAnn3NodeFileName = Part1NodeSizeTrainer.trainAnn3Node();
+        String trainAnn11NodeFileName = Part1NodeSizeTrainer.trainAnn11Node();
+        String trainAnn22NodeFileName = Part1NodeSizeTrainer.trainAnn22Node();
+        String trainAnn44NodeFileName = Part1NodeSizeTrainer.trainAnn44Node();
+        String trainAnn88NodeFileName = Part1NodeSizeTrainer.trainAnn88Node();
 
-		String file = "network_models/part2/network-l1_20-l2_10.dat";
-		test(file, mnistTrainDataSet);
-		test(file, mnistTestDataSet);
-	}
+        /* Balanced / Unbalanced */
+        String trainAnnBalancedTrainDatasetFileName = Part1BalancedDatasetTrainer.trainAnnBalancedTrainDataset();
+        String trainAnnUnalancedTrainDatasetFileName = Part1BalancedDatasetTrainer.trainAnnUnalancedTrainDataset();
 
-	private static void part1Tests() throws IOException {
+        /* Regularization */
+        String trainAnnWithouthRegularizationFileName = Part1RegularizationTrainer.trainAnnWithouthRegularization();
+        String trainAnnWithRegularizationTest1FileName = Part1RegularizationTrainer.trainAnnWithRegularizationTest1();
+        String trainAnnWithRegularizationTest2FileName = Part1RegularizationTrainer.trainAnnWithRegularizationTest2();
 
-		DataSet trainDataSet = DataLoader.loadDataSet("ann-train.data");
-		DataSet testDataSet = DataLoader.loadDataSet("ann-test.data");
+        /* Weight Update Approach */
+        String trainAnnWithBatchFileName = Part1WeightUpdateTrainer.trainAnnWithBatch();
+        String trainAnnWithMiniBatchFileName = Part1WeightUpdateTrainer.trainAnnWithMiniBatch();
+        String trainAnnWithStochaticFileName = Part1WeightUpdateTrainer.trainAnnWithStochatic();
 
-		/* For different values of the hidden unit number */
-		Part1NodeSizeTest.trainAnn3Node();
-		Part1NodeSizeTest.trainAnn11Node();
-		Part1NodeSizeTest.trainAnn22Node();
-		Part1NodeSizeTest.trainAnn44Node();
-		Part1NodeSizeTest.trainAnn88Node();
+        /* Normalization */
+        String trainAnnWithNormalizationFileName = Part1NormalizationTrainer.trainAnnWithNormalization();
+        String trainAnnWithoutNormalizationFileName = Part1NormalizationTrainer.trainAnnWithoutNormalization();
 
-		/* Balanced / Unbalanced */
-		Part1BalancedDatasetTest.trainAnnBalancedTrainDataset();
-		Part1BalancedDatasetTest.trainAnnUnalancedTrainDataset();
+//        test(trainAnn3NodeFileName, trainDataSet);
+//        test(trainAnn3NodeFileName, testDataSet);
+    }
 
-		/* Regularization */
-		Part1RegularizationTest.trainAnnWithouthRegularization();
-		Part1RegularizationTest.trainAnnWithRegularizationTest1();
-		Part1RegularizationTest.trainAnnWithRegularizationTest2();
+    private static void part2TrainExamples() throws IOException {
+        DataSet mnistTestDataSet = CSVLoader.loadDataSet("mnist_test.csv");
+        RealMatrix s = CSVLoader.loadDataSet("mnist_train.csv").getDataMatrix();
+        DataSet mnistTrainDataSet = new DataSet(s.getSubMatrix(0, 30000, 0, s.getColumnDimension() - 1).getData());
 
-		/* Weight Update Approach */
-		Part1WeightUpdateTest.trainAnnWithBatch();
-		Part1WeightUpdateTest.trainAnnWithMiniBatch();
-		Part1WeightUpdateTest.trainAnnWithStochatic();
+        String trainAnnl1_5_l2_10 = Part2NodeSizeTrainer.trainAnnl1_5_l2_10();
 
-		/* Normalization */
-		Part1NormalizationTest.trainAnnWithNormalization();
-		Part1NormalizationTest.trainAnnWithoutNormalization();
+//        test(trainAnnl1_5_l2_10, mnistTrainDataSet);
+//        test(trainAnnl1_5_l2_10, mnistTestDataSet);
+    }
 
-	}
-
-	private static void part2Tests() throws IOException {
-
-		Part2NodeSizeTest.trainAnnl1_5_l2_10();
-//		Part2NodeSizeTest.trainAnnl1_10_l2_10();
-//		Part2NodeSizeTest.trainAnnl1_20_l2_10();
-	}
-
-	private static void test(String filename, DataSet dataSet) {
-		ModelLoader.loadModel(filename).ifPresent(ann -> {
-			ann.accuracy(dataSet);
-		});
-	}
+    private static void test(String filename, DataSet dataSet) {
+        ModelLoader.loadModel(filename).ifPresent(ann -> {
+            ann.accuracy(dataSet);
+        });
+    }
 
 }
