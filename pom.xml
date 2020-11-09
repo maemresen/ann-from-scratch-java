@@ -60,7 +60,7 @@
                     <archive>
                         <manifest>
                             <mainClass>
-                                com.maemresen.ml.hw1.part1.Part1
+                                com.maemresen.ml.hw1.examples.part1.Part1
                             </mainClass>
                         </manifest>
                     </archive>

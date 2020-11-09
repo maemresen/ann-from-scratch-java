@@ -1,4 +1,4 @@
-package com.maemresen.ml.hw1.part1;
+package com.maemresen.ml.hw1.examples.part1;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -19,12 +19,11 @@ import com.maemresen.ml.hw1.util.loader.data.DataLoader;
  * @date Jan 01, 2018
  * @contact maemresen07@gmail.com
  */
+public class Part1WeightUpdateTrainer {
 
-public class Part1RegularizationTest {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Part1WeightUpdateTrainer.class);
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Part1RegularizationTest.class);
-
-	private static String trainAnn(Double lvalue) throws IOException {
+	private static String trainAnn(Integer eSize) throws IOException {
 
 		LOGGER.info("Start Loading Train Dataset");
 		DataSet trainDataSet = DataLoader.loadDataSet("ann-train.data",
@@ -44,11 +43,11 @@ public class Part1RegularizationTest {
 
 		DataSet dataset = trainDataSet;
 		double alpha = 1.5;
-		Double lambda = lvalue;
-		int numOfIterations = 30000;
+		Double lambda = null;
+		int numOfIterations = 10;
 		boolean untilConverge = false;
 		boolean normalization = true;
-		int epochSize = trainDataSet.getSampleSize();
+		int epochSize = (eSize == null) ? trainDataSet.getSampleSize() : eSize;
 		int numOfInputs = trainDataSet.getFeatureSize() + 1;
 		int numOfClasses = trainDataSet.getNumOfClasses();
 		List<Integer> hiddenLayersNumOfUnitList = Collections.singletonList(11);
@@ -63,21 +62,28 @@ public class Part1RegularizationTest {
 		LOGGER.info("Start Learning");
 		ann.learn();
 		LOGGER.trace("Finish Learning");
-		String filename = "network_models/part1/03_regularization/network-"
-				+ ((lvalue == null) ? "nonregularized" : "regularized-l" + lvalue) + ".dat";
+		String approach = "";
+		if (eSize == null) {
+			approach = "batch";
+		} else if (eSize == 1) {
+			approach = "stochastic";
+		} else {
+			approach = "mini-batch" + eSize;
+		}
+		String filename = "network_models/part1/04_weightupdates/network-" + approach + ".dat";
 		ModelLoader.save(ann, filename);
 		return filename;
 	}
 
-	public static String trainAnnWithRegularizationTest1() throws IOException {
-		return trainAnn(10d);
+	public static String trainAnnWithStochatic() throws IOException {
+		return trainAnn(1);
 	}
 
-	public static String trainAnnWithRegularizationTest2() throws IOException {
-		return trainAnn(0.01);
+	public static String trainAnnWithMiniBatch() throws IOException {
+		return trainAnn(1000);
 	}
 
-	public static String trainAnnWithouthRegularization() throws IOException {
+	public static String trainAnnWithBatch() throws IOException {
 		return trainAnn(null);
 	}
 

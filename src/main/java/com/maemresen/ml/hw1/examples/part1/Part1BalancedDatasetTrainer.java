@@ -1,4 +1,4 @@
-package com.maemresen.ml.hw1.part1;
+package com.maemresen.ml.hw1.examples.part1;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -19,25 +19,30 @@ import com.maemresen.ml.hw1.util.loader.data.DataLoader;
  * @date Jan 01, 2018
  * @contact maemresen07@gmail.com
  */
+public class Part1BalancedDatasetTrainer {
 
-public class Part1NormalizationTest {
+	private static final Logger LOGGER = LoggerFactory.getLogger(Part1BalancedDatasetTrainer.class);
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(Part1NormalizationTest.class);
-
-	private static String trainAnn(boolean n) throws IOException {
+	private static String trainAnn(boolean balanced) throws IOException {
 
 		LOGGER.info("Start Loading Train Dataset");
-		DataSet trainDataSet = DataLoader.loadDataSet("ann-train.data",
-				/**/
-				DataBalancers::limitToAvg,
-				/**/
-				DataBalancers::duplicateMin,
-				/**/
-				DataBalancers::duplicateMin,
-				/**/
-				DataBalancers::duplicateMin,
-				/**/
-				DataBalancers::duplicateAboveAvg);
+		DataSet trainDataSet;
+		if (balanced) {
+			trainDataSet = DataLoader.loadDataSet("ann-train.data",
+					/**/
+					DataBalancers::limitToAvg,
+					/**/
+					DataBalancers::duplicateMin,
+					/**/
+					DataBalancers::duplicateMin,
+					/**/
+					DataBalancers::duplicateMin,
+					/**/
+					DataBalancers::duplicateAboveAvg);
+		} else {
+			trainDataSet = DataLoader.loadDataSet("ann-train.data");
+		}
+
 		LOGGER.trace("Finish Loading Dataset");
 
 		LOGGER.trace("Start Creating an Artificial Neural Network");
@@ -47,7 +52,7 @@ public class Part1NormalizationTest {
 		Double lambda = null;
 		int numOfIterations = 30000;
 		boolean untilConverge = false;
-		boolean normalization = n;
+		boolean normalization = true;
 		int epochSize = trainDataSet.getSampleSize();
 		int numOfInputs = trainDataSet.getFeatureSize() + 1;
 		int numOfClasses = trainDataSet.getNumOfClasses();
@@ -63,17 +68,18 @@ public class Part1NormalizationTest {
 		LOGGER.info("Start Learning");
 		ann.learn();
 		LOGGER.trace("Finish Learning");
-		String filename = "network_models/part1/05_normalization/network-"
-				+ ((normalization) ? "normalized" : "not-normalized") + ".dat";
+		String filename = "network_models/part1/02_balanced/network-" + ((balanced) ? "balanced" : "unbalanced")
+				+ ".dat";
 		ModelLoader.save(ann, filename);
 		return filename;
 	}
 
-	public static String trainAnnWithNormalization() throws IOException {
+	public static String trainAnnBalancedTrainDataset() throws IOException {
 		return trainAnn(true);
 	}
 
-	public static String trainAnnWithoutNormalization() throws IOException {
+	public static String trainAnnUnalancedTrainDataset() throws IOException {
 		return trainAnn(false);
 	}
+
 }
