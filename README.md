@@ -13,5 +13,4 @@ The part1 is using on Thyroid dataset \
 ## Part2
 The part1 is using MNIST dataset \
 **Links**
-* https://www.kaggle.com/oddrationale/mnist-in-csv to use
-* https://archive.ics.uci.edu/ml/machine-learning-databases/thyroid-disease/ann-train.data
+* https://www.kaggle.com/oddrationale/mnist-in-csv
